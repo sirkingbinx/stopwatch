@@ -2,20 +2,24 @@
 Basic stopwatch implementation in Lua.
 
 ## Usage
-The library is a simple two-step process for timing.
+### Example
 ```lua
-local stopwatch = require("modules.stopwatch")
+local sw = require("stopwatch")
 
-local timer = stopwatch.create()
-timer:start()
+local stopwatch = sw.create()
+stopwatch:start()
+repeat until os.time() == stopwatch.start_time + 5 -- wait 5 seconds
+stopwatch:stop() -- returns the total time as an integer, but we use :tostring() to automatically format it
+print(stopwatch:tostring())
+```
+### Breakdown
+- `stopwatch.create() -> stopwatch`: Creates a new `stopwatch` object
+### object: `stopwatch`
+- `stopwatch.start_time : integer`: Unix time representation of when the stop watch was started. (`-1` if never started)
+- `stopwatch.end_time : integer`: Unix time representation of when the stop watch was ended. (`-1` if never ended)
+- `stopwatch.difference : integer`: Stopwatch runtime (`-1` if stopwatch has not been started and ended)
 
-local time = timer:stop()
--- or optionally, timer.difference
-print(time)
-```
-You can define start times and end times as well if necessary.
-```lua
-time.start_time = os.time() - 60 -- 1 minute ago
--- stuff
-print(time:stop()) -- still the difference between start_time and stop_time
-```
+- `stopwatch:start() : nil`: Start the stopwatch, sets `start_time` to the current unix time
+- `stopwatch:end() : integer`: Ends the stopwatch, sets `end_time` to the current unix time, and returns `stopwatch.difference`
+
+- `stopwatch:tostring(): string`: Converts the stopwatch's time to a string (formatted as `"x secs"`)

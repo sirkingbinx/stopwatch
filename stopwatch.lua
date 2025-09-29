@@ -3,7 +3,7 @@
 
 local stopwatch = {}
 
-local stopwatch_object = {
+local stopwatch = {
     start_time = -1,
     end_time = -1,
     difference = -1,
@@ -24,15 +24,17 @@ local stopwatch_object = {
         self.difference = os.difftime(self.start_time, self.end_time)
 
         return self.difference
-    end
+    end,
+
+    tostring = function()
+        return ("%s secs"):format(self.difference)
+    end,
 }
 
-function stopwatch.create()
-    local this_stopwatch = {}
-
-    setmetatable(this_stopwatch, stopwatch_object)
-
-    return this_stopwatch
-end
+function stopwatch.create() {
+    local new_stopwatch = {}
+    setmetatable(new_stopwatch, stopwatch)
+    return new_stopwatch
+}
 
 return stopwatch
